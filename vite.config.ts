@@ -2,7 +2,6 @@ import { resolve } from "path";
 import { defineConfig } from "vitest/config";
 import dts from "vite-plugin-dts";
 import checker from "vite-plugin-checker";
-import { externalizeDeps } from "vite-plugin-externalize-deps";
 
 export default defineConfig({
   plugins: [
@@ -21,7 +20,6 @@ export default defineConfig({
         useFlatConfig: true,
       },
     }),
-    externalizeDeps({ except: ["@xmldom/xmldom"] }),
   ],
   build: {
     lib: {
@@ -30,10 +28,17 @@ export default defineConfig({
       name: "ROSLIB",
       // the proper extensions will be added
       fileName: "RosLib",
-      formats: ["es"],
+      formats: ["es", "umd"],
     },
     // Keep synchronized with minimum engine specified in CI & package.json
     target: "node18",
+    minify: "esbuild",
+    rollupOptions: {
+      output: {
+        // Create both regular and minified versions
+        assetFileNames: "roslib.[ext]",
+      },
+    },
   },
   test: {
     include: ["{src,test}/**/*.{test,spec,example}.?(c|m)[jt]s?(x)"],

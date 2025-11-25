@@ -2,10 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <script src="../importmap.js"></script>
+    <!-- <script src="../importmap.js"></script> -->
+    <script src="../dist/RosLib.umd.cjs"></script>
 
     <script type="module">
-      import * as ROSLIB from "roslib";
+      // import * as ROSLIB from "roslib";
       // Connecting to ROS
       // -----------------
       var ros = new ROSLIB.Ros({
@@ -47,7 +48,7 @@
       });
 
       // Send an action goal
-      var goal = { order: 5 };
+      var goal = { order: 50 };
 
       var goal_id = fibonacciClient.sendGoal(
         goal,
