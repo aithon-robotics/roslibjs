@@ -66,6 +66,24 @@
               ": " +
               feedback.sequence,
           );
+        },
+        function(error) {
+          console.error('Goal failed/rejected on ' + fibonacciClient.name + ':', error);
+        },
+      );
+
+      // Function to cancel the current action
+      function cancelAction() {
+        if (goal_id) {
+          fibonacciClient.cancelGoal(goal_id);
+          console.log('Canceling goal:', goal_id);
+        } else {
+          console.log('No active goal to cancel');
+        }
+      }
+
+        // Expose cancelAction to global scope for onclick handler
+        window.cancelAction = cancelAction;
     </script>
   </head>
 
@@ -88,6 +106,12 @@
         Error in the backend!
       </p>
       <p id="closed" style="display: none">Connection closed.</p>
+    </div>
+      
+    <div style="margin-top: 20px;">
+      <button onclick="cancelAction()" style="padding: 10px 20px; font-size: 16px; background-color: #ff4444; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Cancel Action
+      </button>
     </div>
   </body>
 </html>

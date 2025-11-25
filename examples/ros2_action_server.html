@@ -26,7 +26,9 @@
         actionType: "example_interfaces/Fibonacci",
       });
 
-      var actionCallback = function (goal, id) {
+      var canceledGoals = {};
+
+      var actionCallback = async function (goal, id) {
         console.log(
           "Received action goal on " +
             fibonacciServer.name +
@@ -56,6 +58,16 @@
           fibonacciServer.sendFeedback(id, {
             sequence: fibonacciSequence,
           });
+
+          // delay to simulate computation
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Check if goal was canceled
+          if (canceledGoals[id]) {
+            console.log('Action was canceled');
+            delete canceledGoals[id];
+            return;
+          }
         }
 
         // send result
@@ -66,6 +78,7 @@
       var cancelCallback = function (id) {
         console.log("Canceled action with goal ID " + id);
         fibonacciServer.setCanceled(id, { sequence: [] });
+        canceledGoals[id] = true;
       };
 
       fibonacciServer.advertise(actionCallback, cancelCallback);
